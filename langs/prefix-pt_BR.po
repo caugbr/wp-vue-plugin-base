@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plugin name\n"
+"POT-Creation-Date: 2022-09-18 21:04-0300\n"
+"PO-Revision-Date: 2022-09-18 21:28-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.1.1\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: vue-plugin-base.php:127
+msgid "VPB posts"
+msgstr ""
+
+#: vue-plugin-base.php:128 vue-plugin-base.php:154 vue-plugin-base.php:193
+msgid "VPB post"
+msgstr ""
+
+#: vue-plugin-base.php:129
+msgid "VPB post Archives"
+msgstr "Arquivo VPB post"
+
+#: vue-plugin-base.php:130
+msgid "VPB post Attributes"
+msgstr "Atributos do VPB post"
+
+#: vue-plugin-base.php:131
+msgid "Parent VPB post:"
+msgstr "Post pai:"
+
+#: vue-plugin-base.php:132
+msgid "All VPB posts"
+msgstr "Todos os VPB posts"
+
+#: vue-plugin-base.php:133
+msgid "Add New VPB post"
+msgstr "Adicionar VPB post"
+
+#: vue-plugin-base.php:134
+msgid "Add New"
+msgstr "Adicionar"
+
+#: vue-plugin-base.php:135
+msgid "New VPB post"
+msgstr "Novo VPB post"
+
+#: vue-plugin-base.php:136
+msgid "Edit VPB post"
+msgstr "Editar VPB post"
+
+#: vue-plugin-base.php:137
+msgid "Update VPB post"
+msgstr "Atualizar VPB post"
+
+#: vue-plugin-base.php:138
+msgid "View VPB post"
+msgstr "Ver VPB post"
+
+#: vue-plugin-base.php:139
+msgid "View VPB posts"
+msgstr "Ver VPB posts"
+
+#: vue-plugin-base.php:140
+msgid "Search VPB post"
+msgstr "Buscar por VPB post"
+
+#: vue-plugin-base.php:141
+msgid "Not found"
+msgstr "Não encontrado"
+
+#: vue-plugin-base.php:142
+msgid "Not found in Trash"
+msgstr "Não encontrado na lixeira"
+
+#: vue-plugin-base.php:143
+msgid "Featured Image"
+msgstr "Imagem destacada"
+
+#: vue-plugin-base.php:144
+msgid "Set featured image"
+msgstr "Definir imagem destacada"
+
+#: vue-plugin-base.php:145
+msgid "Remove featured image"
+msgstr "Remover imagem destacada"
+
+#: vue-plugin-base.php:146
+msgid "Use as featured image"
+msgstr "Usar como imagem destacada"
+
+#: vue-plugin-base.php:147
+msgid "Insert into item"
+msgstr "Inserir no item"
+
+#: vue-plugin-base.php:148
+msgid "Uploaded to this item"
+msgstr "Subir para este item"
+
+#: vue-plugin-base.php:149
+msgid "VPB posts list"
+msgstr "Lista de VPB posts"
+
+#: vue-plugin-base.php:150
+msgid "VPB posts list navigation"
+msgstr "Navegar pela lista"
+
+#: vue-plugin-base.php:151
+msgid "Filter VPB posts list"
+msgstr "Filtrar lista"
+
+#: vue-plugin-base.php:155
+msgid "WP-Vue plugin base post type"
+msgstr "Post type do WP-Vue plugin base"
+
+#: vue-plugin-base.php:200
+msgid "Show Vue app"
+msgstr "Mostrar Vue app"
+
+#: vue-plugin-base.php:203
+msgid "Something is wrong..."
+msgstr "Algo está errado..."

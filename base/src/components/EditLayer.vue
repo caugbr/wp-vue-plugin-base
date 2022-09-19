@@ -16,11 +16,13 @@
             </p>
         </template>
         <template #sidebar>
-            <wp-meta-box :boxTitle="t('My first box')">
-                Box 1
+            <wp-meta-box :boxTitle="t('Sample box')">
+                {{ t('Box content') }}
             </wp-meta-box>
-            <wp-meta-box :boxTitle="t('The second box')">
-                Box 2
+            <wp-meta-box :boxTitle="t('Return to editor')">
+                <button type="button" class="components-button is-primary" id="hide_app" @click="hideApp">
+                    {{ t("Hide Vue app") }}
+                </button>
             </wp-meta-box>
         </template>
         <template #footer>
@@ -69,6 +71,9 @@ export default {
             setTimeout(() => {
                 this.loading(false);
             }, 2000);
+        },
+        hideApp() {
+            document.body.classList.remove('admin-layout-visible');
         }
     },
     watch: {

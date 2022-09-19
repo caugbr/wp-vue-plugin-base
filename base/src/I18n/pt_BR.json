@@ -1,0 +1,14 @@
+{
+    "language_name": "Português (Brasil)",
+    "welcome_text": "O componente src/components/EditLayer.vue é um starter component. Edite ele pra mudar este conteúdo.",
+    "Editing post": "Editando post",
+    "Things you have in this package": "Incluído neste pacote",
+    "Loading overlay": "",
+    "Some message to the user...": "Alguma mensagem ao usuário...",
+    "User message bar": "Barra de mensagens",
+    "Sample box": "Box exemplo",
+    "Box content": "Conteúdo do box",
+    "Return to editor": "Voltar ao editor",
+    "Hide Vue app": "Esconder app",
+    "You can use this space to display some useful information": "Você pode usar este espaço para mostrar informações úteis"
+}

@@ -14,6 +14,7 @@ class VuePluginBase {
 	private $loadScripts;
 
     public function __construct() {
+		add_action('init', [$this, 'load_textdomain']);
         add_action('init', [$this, 'add_post_type'], 0);
         add_action('wp_insert_post', [$this, 'save_post'], 10, 2);
         add_action('add_meta_boxes', [$this, 'add_meta_box']);
@@ -29,6 +30,10 @@ class VuePluginBase {
 		$this->scriptsUrlProd = plugin_dir_url(__FILE__) . "vue-app";
 		$this->loadScripts = ['wp-vue-app-js' => 'js/app.js', 'wp-vue-vendors-js' => 'js/chunk-vendors.js'];
     }
+
+	public function load_textdomain() {
+		load_plugin_textdomain('prefix', false, dirname(plugin_basename(__FILE__)) . '/langs'); 
+	}
 
 	/**
 	 * Include the necessary files to run Vue, based on constant 
@@ -68,10 +73,9 @@ class VuePluginBase {
 	 * @return string
 	 */
 	public function get_info() {
-		$lang = strtolower(str_replace('_', '-', get_locale()));
 		$ret = [
 			"pluginDirUrl" => $this->scriptsUrlProd,
-			"wpLang" => $lang,
+			"wpLang" => get_locale(),
 			"wpApiSettings" => [
 				"root" => esc_url_raw(rest_url()),
 				"nonce" => wp_create_nonce('wp_rest')
@@ -102,7 +106,7 @@ class VuePluginBase {
 				postTitle: '<?php print $postTitle ?>'
 			};
 			window.addEventListener("load", () => {
-				document.querySelector('#toggle_app').addEventListener('click', () => {
+				document.querySelector('#show_app').addEventListener('click', () => {
 					document.body.classList.add('admin-layout-visible');
 				});
 				wp.ajax.post('get_info', {}).done(response => {
@@ -152,7 +156,7 @@ class VuePluginBase {
 		);
 		$args = array(
 			'label'                 => __('VPB post', 'prefix'),
-			'description'           => __('Vue plugin base post type', 'prefix'),
+			'description'           => __('WP-Vue plugin base post type', 'prefix'),
 			'labels'                => $labels,
 			'supports'              => array('title', 'editor'),
 			'taxonomies'            => array('category', 'post_tag'),
@@ -196,11 +200,11 @@ class VuePluginBase {
 	public function box_html($post) {
 	?>
 		<div class="components-panel__row" id="vc-admin-wrapper" style="display: none">
-			<button type="button" class="components-button is-secondary" id="toggle_app">
-				<?php _e('Toggle Vue app', 'joh'); ?>
+			<button type="button" class="components-button is-secondary" id="show_app">
+				<?php _e('Show Vue app', 'prefix'); ?>
 			</button>
 		</div>
-		<div id="vc-admin-error"><?php _e('Something is wrong...', 'joh'); ?></div>
+		<div id="vc-admin-error"><?php _e('Something is wrong...', 'prefix'); ?></div>
 		<div id="vue-app" data-type="admin" style="display: none"></div>
 		<?php print $this->wp_info(); ?>
 	<?php

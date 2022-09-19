@@ -10,7 +10,7 @@ On the site, this content will be displayed via shortcode, which is automaticall
 
 ## WP-CLI
 
-This script works better with [WP-CLI](https://wp-cli.org/). If you don't have it installed in you machine, some steps will be skiped and some things will not be done. But you can use it anyway to create you plugin, but all other commands depends on WP-CLI.
+This script works better with [WP-CLI](https://wp-cli.org/). If you don't have it installed in you machine, some steps will be skiped and some things will not be possible. Anyway you can use it to create you plugin, but all other commands depends on WP-CLI and will not work.
 
 ## The plugin
 

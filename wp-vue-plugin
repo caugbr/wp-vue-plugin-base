@@ -109,20 +109,6 @@ class InstallVuePlugin {
 
     public function create() {
 
-        $this->files = [
-            'vue-plugin-base.php' => '%pluginSlug%.php',
-            'base/.env' => '.env',
-            'base/README.md' => 'README.md',
-            'base/package.json' => 'package.json',
-            'base/vue.config.js' => 'vue.config.js',
-            'base/babel.config.js' => 'babel.config.js',
-            'base/.htaccess' => '.htaccess',
-            'base/.gitignore' => '.gitignore',
-            'base/.eslintrc.js' => '.eslintrc.js',
-            'base/.browserslistrc' => '.browserslistrc',
-            'base/src/*' => '*'
-        ];
-
         $this->localPath = join("/", explode(DIRECTORY_SEPARATOR, dirname(__FILE__)));
 
         $this->line();
@@ -166,14 +152,14 @@ class InstallVuePlugin {
             $plugins = $this->getPlugins();
             if (!isset($plugins[$this->pluginSlug])) {
                 $this->line();
-                die("The plugin is not installed for some reason. Please clean all created files and run it again.");
+                die("The plugin was not installed for some reason. Please clean all created files and run it again.");
             } else {
                 $this->line();
                 $this->line("✔ The plugin '{$this->pluginSlug}' was installed correctly");
             }
             if ($plugins[$this->pluginSlug]) {
                 $this->line();
-                $this->line("✔ The plugin '{$this->pluginSlug}' was already activated");
+                $this->line("✔ The plugin '{$this->pluginSlug}' is already activated");
             } else {
                 if ($this->askYesNo("Do you want to activate the plugin now? Y/N")) {
                     shell_exec("wp plugin activate {$this->pluginSlug}");
@@ -210,8 +196,7 @@ class InstallVuePlugin {
             }
         } else {
             $this->line();
-            $this->line("WP-CLI is not installed, so we could not activate the plugin.");
-            $this->line("You must activate your plugin manually.");
+            $this->line("We could not activate the plugin, you must activate your plugin manually.");
         }
 
         if ($this->askYesNo("Run the development server here? Y/N")) {
@@ -316,8 +301,9 @@ class InstallVuePlugin {
     }
 
     public function pluginHeader() {
-        $header = "/*\nPlugin Name: {$this->pluginName}\nPlugin URI: Plugin URL here\nDescription: Plugin description here\n";
-        $header .= "Version: 1.0\nAuthor: Author name here\nAuthor URI: Author URL here\nLicense: Wordpress\n*/";
+        $header = "/**\n * Plugin Name: {$this->pluginName}\n * Plugin URI: Plugin URL here\n";
+        $header .= " * Description: Plugin description here\n * Version: 1.0\n * Author: Author name here\n";
+        $header .= " * Author URI: Author URL here\n * Text Domain: prefix\n * Domain Path: /langs\n * License: Wordpress\n */";
         return $header;
     }
 
@@ -390,6 +376,23 @@ class InstallVuePlugin {
     public function copyFiles() {
         mkdir($this->pluginDirectory);
         mkdir("{$this->pluginDirectory}vue-app");
+        mkdir("{$this->pluginDirectory}langs");
+
+        $this->files = [
+            'vue-plugin-base.php' => '%pluginSlug%.php',
+            'langs/prefix-pt_BR.po' => '%prefix%-pt_BR.po',
+            'langs/prefix-pt_BR.mo' => '%prefix%-pt_BR.mo',
+            'base/README.md' => 'README.md',
+            'base/package.json' => 'package.json',
+            'base/vue.config.js' => 'vue.config.js',
+            'base/babel.config.js' => 'babel.config.js',
+            'base/.htaccess' => '.htaccess',
+            'base/.gitignore' => '.gitignore',
+            'base/.eslintrc.js' => '.eslintrc.js',
+            'base/.browserslistrc' => '.browserslistrc',
+            'base/src/*' => '*'
+        ];
+
         foreach ($this->files as $path => $newName) {
             $pathParts = explode("/", $path);
             $fileName = array_pop($pathParts);
@@ -419,6 +422,7 @@ class InstallVuePlugin {
     public function replaceStrings() {
         $files = [
             "{$this->pluginDirectory}{$this->pluginSlug}.php",
+            "{$this->pluginDirectory}langs/{$this->prefix}-pt_BR.po",
             "{$this->pluginDirectory}vue-app/src/components/Wp/api.js",
             "{$this->pluginDirectory}vue-app/package.json"
         ];
@@ -497,11 +501,6 @@ class InstallVuePlugin {
                 return;
             }
             $path = "{$pluginDir}/vue-app/src/i18n/{$lang}.json";
-            if (file_exists($path)) {
-                $this->line();
-                $this->line("The file {$lang}.json already exists.");
-                return;
-            }
             $files = $this->listFiles("{$pluginDir}/vue-app/src/components");
             $code = ["language_name" => $langName];
             foreach ($files as $file) {
@@ -511,9 +510,19 @@ class InstallVuePlugin {
                     $code[$str] = "";
                 }
             }
-            file_put_contents($path, json_encode($code, JSON_PRETTY_PRINT));
+            $msg = "The file '{$path}' was created";
+            if (file_exists($path)) {
+                $original = json_decode(file_get_contents($path), true);
+                foreach ($original as $str => $translation) {
+                    if (isset($code[$str]) && empty($code[$str]) && !empty($translation)) {
+                        $code[$str] = $translation;
+                    }
+                }
+                $msg = "The file '{$path}' was updated";
+            }
+            file_put_contents($path, json_encode($code, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
             $this->line();
-            $this->line("The file '{$path}' was created");
+            $this->line($msg);
         }
         return false;
     }
