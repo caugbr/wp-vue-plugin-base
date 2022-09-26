@@ -43,11 +43,12 @@ export default {
             };
             this.waitFor(cond, act);
         } else {
-            console.error('WP-Vue variable was not found!');
+            console.error(this.t('WP-Vue variable was not found!'));
             return;
         }
+        document.querySelector('#wp-vue-error').style.display = 'none';
         // remove it
-        this.userMessage("You are in the Frontend view of your Vue app!", "info");
+        this.userMessage(this.t("You are in the Frontend view of your Vue app!"), "info");
     }
 }
 </script>

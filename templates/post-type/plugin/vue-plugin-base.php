@@ -106,9 +106,12 @@ class VuePluginBase {
 				postTitle: '<?php print $postTitle ?>'
 			};
 			window.addEventListener("load", () => {
-				document.querySelector('#show_app').addEventListener('click', () => {
-					document.body.classList.add('admin-layout-visible');
-				});
+				const button = document.querySelector('#show_app');
+				if (button) {
+					button.addEventListener('click', () => {
+						document.body.classList.add('admin-layout-visible');
+					});
+				}
 				wp.ajax.post('get_info', {}).done(response => {
 					window.wpVue = { ...window.wpVue, ...response };
 				});
@@ -120,7 +123,8 @@ class VuePluginBase {
 
 	public function shortcode_html() {
 		$info = $this->wp_info();
-		$html = '<div id="vue-app" data-type="frontend"></div>';
+		$html = '<div id="wp-vue-error">' . __('Vue app: something is wrong...', 'prefix') . '</div>';
+		$html .= '<div id="vue-app" style="display: none"></div>';
 		return "{$info}\n{$html}";
 	}
 

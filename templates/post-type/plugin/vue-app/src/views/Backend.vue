@@ -77,7 +77,7 @@ export default {
             };
             this.waitFor(cond, act);
         } else {
-            console.error('WP-Vue variable was not found!');
+            console.error(this.t('WP-Vue variable was not found!'));
             return;
         }
         document.querySelector('#vc-admin-wrapper').style.display = 'block';
