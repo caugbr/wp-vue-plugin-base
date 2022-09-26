@@ -101,8 +101,8 @@ You can build the production package from here using the generated plugin slug. 
 --------
 **LANG-FILE**
 The command 'lang-file' generates a new I18n translation file (JSON), with all translatable strings on it.
-These are the strings sent to the translation functions t() and tl(). They will be extracted from your Vue files.
+These are the strings sent to the translation functions `t()` and `tl()`. They will be extracted from your Vue files.
  
-    php wp-vue-plugin lang-file plugin-slug lang-code
+    php wp-vue-plugin lang-file plugin-slug lang_CODE
 
 Use this command to start a new translation. It will read all occurrences of `t('Some string')` and `tl('Some string')` and put it all into the new file.
