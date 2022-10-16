@@ -1,14 +1,20 @@
 <?php
 
-class PluginTemplate extends PluginData {
+class PluginTemplate extends TemplateBase {
 
-    public $post_type = true;
+    public $postType = true;
+    public $devPort = '8081';
 
-    public function __construct() {
+    public function __construct($args, $flags) {
+        $this->set_args($args, $flags);
+
+        $this->templateVars['postTypeDescription'] = [
+            "question" => "Post type description?",
+            "required" => false
+        ];
         $this->templateId = "post-type";
         $this->templateName = "Post type";
-        $this->templateDescription = "Creates a new post type and gives you two Vue apps running, one in admin, in a metabox to edit our post type and other to show this content in site, via shortcode.";
-        $this->templateHtmlDescription = "<p>The generated plugin has a specific design and will be useful if you need to create a post type and display/edit it using Vue apps.</p> <p>In the administration part, there is a meta box when creating/editing a post (of the type we created) this opens a layer over the WP editor, with the same layout, so you can build your own editor for your content type.</p> <p>In the front side, this content will be displayed via shortcode, which is automatically included in the post when you create a post.</p>";
+        $this->templateDescription = "Creates a new post type and gives you two Vue apps running, one in admin, in a metabox to edit your post type content and other to show this content in site, via shortcode.";
     }
 
     public function base_directories() {
@@ -34,14 +40,17 @@ class PluginTemplate extends PluginData {
 
     public function replacement_terms() {
         return [
-            "VuePluginBase"   => "className",
-            "vue-plugin-slug" => "pluginSlug",
-            "Plugin name"     => "pluginName",
-            "VPB posts"       => "postTypeNamePlural",
-            "VPB post"        => "postTypeName",
-            "prefix_post"     => "postTypeId",
-            "vue_plugin_base" => "varName",
-            "prefix"          => "prefix"
+            "VuePluginBase"                => "className",
+            "vue-plugin-slug"              => "pluginSlug",
+            "Plugin name"                  => "pluginName",
+            "VPB posts"                    => "postTypeNamePlural",
+            "VPB post"                     => "postTypeName",
+            "prefix_post"                  => "postTypeId",
+            "vue_plugin_base"              => "varName",
+            "prefix_shortcode"             => "shortcodeName",
+            "prefix"                       => "prefix",
+            "WP-Vue plugin base post type" => "postTypeDescription",
+            "http://localhost:8080"        => "devUrl"
         ];
     }
 }

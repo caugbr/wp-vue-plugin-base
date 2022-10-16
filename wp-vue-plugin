@@ -8,88 +8,90 @@
  * Author: Cau Guanabara
  */
 
-require_once "./install-wp-vue-plugin.php";
+require_once "./src/base.php";
 
-function callWPVueInstaller($args) {
-    $ivp = new InstallWPVuePlugin($args);
-    if (!isset($ivp->args[1])) {
-        $ivp->help();
+function callWPVuePlugin($args) {
+    $wpv = new WPVuePlugin($args);
+
+    if (!isset($wpv->args[1])) {
+        $wpv->help();
         return;
     }
 
-    if ($ivp->args[1] == 'remove') {
-        if (empty($ivp->args[2])) {
-            $ivp->line("\nThe plugin slug is required to command REMOVE.");
+    if ($wpv->args[1] == 'remove') {
+        if (empty($wpv->args[2])) {
+            $wpv->line("\nThe plugin slug is required to command REMOVE.");
         } else {
-            if ($ivp->askYesNo("This action will remove the entire plugin permanently. Are you sure? (Y/N)")) {
-                $ivp->remove($ivp->args[2]);
+            if ($wpv->askYesNo("This action will remove the plugin permanently. Are you sure? (Y/N)")) {
+                $wpv->remove($wpv->args[2]);
             }
         }
         return;
     }
 
-    if ($ivp->args[1] == 'templates') {
-        $ivp->show_templates();
+    if ($wpv->args[1] == 'templates') {
+        $wpv->show_templates();
         return;
     }
 
-    if ($ivp->args[1] == 'install') {
-        if (empty($ivp->args[2])) {
-            $ivp->line("\nThe plugin slug is required to command INSTALL.");
+    if ($wpv->args[1] == 'install') {
+        if (empty($wpv->args[2])) {
+            $wpv->line("\nThe plugin slug is required to command INSTALL.");
         } else {
-            $ivp->install($ivp->args[2]);
+            $wpv->install($wpv->args[2]);
         }
         return;
     }
 
-    if ($ivp->args[1] == 'serve') {
-        if (empty($ivp->args[2])) {
-            $ivp->line("\nThe plugin slug is required to command SERVE.");
+    if ($wpv->args[1] == 'serve') {
+        if (empty($wpv->args[2])) {
+            $wpv->line("\nThe plugin slug is required to command SERVE.");
         } else {
-            $ivp->startServer($ivp->args[2]);
+            $wpv->startServer($wpv->args[2]);
         }
         return;
     }
 
-    if ($ivp->args[1] == 'build') {
-        if (empty($ivp->args[2])) {
-            $ivp->line("\nThe plugin slug is required to command BUILD.");
+    if ($wpv->args[1] == 'build') {
+        if (empty($wpv->args[2])) {
+            $wpv->line("\nThe plugin slug is required to command BUILD.");
         } else {
-            $ivp->build($ivp->args[2]);
+            $wpv->build($wpv->args[2]);
         }
         return;
     }
 
-    if ($ivp->args[1] == 'lang-file') {
-        if (empty($ivp->args[2]) || empty($ivp->args[3])) {
-            $ivp->line();
-            $ivp->line("The command LANG-FILE requires the plugin slug and the language code.");
+    if ($wpv->args[1] == 'lang-file') {
+        if (empty($wpv->args[2]) || empty($wpv->args[3])) {
+            $wpv->line();
+            $wpv->line("The command LANG-FILE requires the plugin slug and the language code.");
         } else {
-            $lname = $ivp->args[3];
-            if (empty($ivp->args[4])) {
-                $ivp->line();
-                $ivp->line("Language name (written in that language)?");
+            $lname = $wpv->args[3];
+            if (empty($wpv->args[4])) {
+                $wpv->line();
+                $wpv->line("Language name (written in that language)?");
                 $lname = readline();
             }
-            $ivp->extractStrings($ivp->args[2], $ivp->args[3], empty($ivp->args[4]) ? $lname : $ivp->args[4]);
+            $wpv->extractStrings($wpv->args[2], $wpv->args[3], empty($wpv->args[4]) ? $lname : $wpv->args[4]);
         }
         return;
     }
 
-    if ($ivp->args[1] != 'create') {
-        $ivp->line();
-        $ivp->line("Command not recognized '{$ivp->args[1]}'");
+    if ($wpv->args[1] != 'create') {
+        $wpv->line();
+        $wpv->line("Command not recognized '{$wpv->args[1]}'");
         return;
     }
 
-    if (!empty($ivp->args[2])) {
-        $ivp->pluginName = $ivp->args[2];
-        $ivp->postTypeName = isset($ivp->args[3]) ? $ivp->args[3] : ucfirst($ivp->toPrefix($ivp->pluginName)) . " post";
+    if (!empty($wpv->args[2])) {
+        $wpv->pluginName = $wpv->args[2];
+        if (!empty($wpv->args[3])) {
+            $wpv->postTypeName = $wpv->args[3];
+        }
     }
 
-    $ivp->create();
+    $wpv->create();
 }
 
-callWPVueInstaller($argv);
-
+callWPVuePlugin($argv);
 ?>
