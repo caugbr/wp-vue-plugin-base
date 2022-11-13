@@ -28,7 +28,7 @@ class WPVuePlugin {
     public $base_directories;              // directories to be created
     public $replacement_files;             // the files that will be processed
     public $replacement_terms;             // terms to be replaced
-    public $template = NULL;
+    public $template = NULL;               // holds the instance of templates class
 
     public $args;
     public $flags;
@@ -222,8 +222,6 @@ class WPVuePlugin {
             $this->askOpenCode();
             $this->line();
             $this->line("The development server will be running here. Do not close this window. Ctrl + C to stop.");
-            // chdir("{$this->template->pluginDirectory}/{$this->template->appDir}");
-            // shell_exec("npm run serve");
             $this->startServer($this->template->pluginSlug);
         } 
         else {

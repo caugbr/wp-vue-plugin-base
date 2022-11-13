@@ -3,7 +3,7 @@
 class PluginTemplate extends TemplateBase {
 
     public $postType = true;
-    public $devPort = '8081';
+    // public $devPort = '8081';
 
     public function __construct($args, $flags) {
         $this->set_args($args, $flags);

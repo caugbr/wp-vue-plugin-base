@@ -45,12 +45,16 @@ abstract class TemplateBase {
         ]
     ];
 
-    // The template must define these values
+    // The template must define these values //
+
+    // Plugin dir
     public $pluginDirectory = '';
+    // The name for the variable that holds the plugin class instance
     public $varName = '';
+    // The class name
     public $className = '';
 
-    // If TRUE the header information will be asked to user, otherwise the default
+    // If TRUE, the header information will be asked to user, otherwise the default
     // values will be used to all fields that does not have a default value.
     public $fillHeader = true;
 
@@ -62,6 +66,7 @@ abstract class TemplateBase {
     // Path to folder i18n, that contains the JSON translation files.
     // Leave it empty if you don't want to use JSON translations.
     public $i18nDir = 'vue-app/src/i18n';
+    // Path to WP languages directory
     public $wpLangDir = 'langs';
 
     public $devHost = 'http://127.0.0.1';

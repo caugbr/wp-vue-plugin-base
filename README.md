@@ -1,11 +1,12 @@
 # WP-Vue plugin base
-This script is not a Wordpress plugin. Although it must be placed in the plugins directory, it is a command line tool that generates a WP plugin, a starter code to build your own plugin, already integrated with Vue 2.
+This script is not a Wordpress plugin. Although it must be placed in the plugins directory, it is a command line tool that generates a WP plugin, a starter code for you to build your own plugin, already integrated with Vue 2.
 
 ## WP-CLI
 WP-Vue plugin base works better with [WP-CLI](https://wp-cli.org/). If you don't have it installed in you machine, some steps will be skiped and some things will not be possible. Anyway you can use it to create you plugin, but all other commands depends on WP-CLI and will not work.
 
 ## Plugin templates
-This version has two different plugins, but the most important, the possibility to add new templates with other designs and features.
+The WP-Vue plugin base was a boilerplate, but this version brings the possibility to add new templates. In other words, now it is a plugin generator, capable to install  different plugins, with other designs and features.
+This version has two templates.
 
 ### The 'post-type' template
 The starter code comes with all Vue related things done and two views already linked and functional. The component Backend.vue is loaded in post edit page and the Frontend.vue will be loaded using a shortcode. This is the default template.
