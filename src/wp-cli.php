@@ -22,6 +22,16 @@ trait WpVuePluginBaseWpCli {
         return false;
     }
 
+    // return the path to the main file of the given plugin
+    public function pluginPath($slug) {
+        if ($this->wpCli()) {
+            $pluginsDir = trim(shell_exec("wp plugin path"));
+            $pluginFile = "{$pluginsDir}/{$this->slug}/{$this->slug}.php";
+            return file_exists($pluginFile) ? $pluginFile : false;
+        }
+        return false;
+    }
+
     // get a list of plugins using WP-CLI
     public function getPlugins() {
         if ($this->wpCli()) {

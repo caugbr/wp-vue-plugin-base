@@ -7,6 +7,7 @@ trait WpVuePluginBaseNpm {
         if ($this->wpCli()) {
             $this->check_template($slug);
             $dir = trim(shell_exec("wp plugin path"));
+            print "{$dir}/{$slug}/{$this->template->appDir}\n";
             if (file_exists("{$dir}/{$slug}/{$this->template->appDir}")) {
                 if (!empty($message)) {
                     $this->line();

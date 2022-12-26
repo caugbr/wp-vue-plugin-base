@@ -1,58 +1,128 @@
 # *WP-Vue Plugin base* templates
-This system was initially a simple boilerplate, a starter code to develop a new plugin, but instead of just indicating which terms should be replaced in the code, I decided to make the replacements automatically through a PHP for command line script.
-Soon I realized the possibility of having more than one plugin model and I turned the WP-Vue plugin into a more generic installer, capable of installing different plugin templates, delegating to templates the definition of what should be copied and what terms should be replaced in which files. In addition, the system can install npm packages, start the development server, among ohter things. The user can also choose to activate the plugin in WP and create a test post, if the template includes a post type.
-Now we have a plugins repository and the system can install any of them. At the moment there are only two, but the possibility is open for us to add more over time.
+This system was initially thought of as a simple boilerplate, a starter code to build a WP plugin. But instead of simply showing what should be replaced in the code, I decided to find a way to do the replacements automatically. That's how the idea of this command line tool came up and, because of this architecture, we can use several different plugin templates.
 
-By default we will ask the user to enter data for the following variables: (* required)
-*  ```pluginName*``` - Legible plugin name
-*  ```pluginSlug*``` - Name used in URLs
-*  ```prefix*``` - Used as prefix in some functions and as textdomain to WP translations
-*  ```shortcodeName``` - Shortcode name
+By default we will ask the user to define the following variables: (* required)
+* `pluginName*` - Human-readable name of the plugin
+* `pluginSlug*` - Name used in URLs
+* `prefix*` - Used as a prefix in some functions and as a textdomain for WP translations
+* `shortcodeName` - Name to the WP shortcode
   
 If the plugin creates a post type
-*  ```postTypeName``` - Post type name
-*  ```postTypeNamePlural``` - Post type name plural
-*  ```postTypeSlug``` - Name used in URLs
-  
+* `postTypeName` - Post type name
+* `postTypeNamePlural` - Post type name (plural)
+* `postTypeSlug` - Name used in URLs
+
 In addition, each template can create its own variables.
-There are some other values used that are combinations of the variables above and fixed strings that are not asked to the user.
+Some other internal values will be created from combinations and adaptations of the defined values and will not be asked to the user.
   
 ## Creating a new template
-A template must have a file called ```/plugin-template.php``` containing the ```class PluginTemplate```, that extendends the ```abstract class TemplateBase```. This class must provide the installation information and define some variables. The ```TemplateBase``` will be already included, dont worry about it.
+A template should contain the base plugin and a file with the same name as the directory (the `template id` followed by '.php') - something like `/templates/[template-id]/[template-id].php`, which should provide information for the installation and set some variables.
 
-### First step: create the plugin
-Each model is a fullt functional WP plugin, just containing some terms that will be replaced in process.
-After your plugin is ready and unctional, save it in ```/templates/[template-id]/plugin```, using unique terms in your code to each detail that should be replaced by a variable.
+### Step 1: Create the plugin
+Each plugin template is a complete and functional plugin, only containing a few terms that will be replaced by the user values in the process (these terms need to be unique). When your plugin is up and running, save it on `/templates/[template-id]/plugin`.
 
-### Second step: the ```PluginTemplate``` class
-Now you have to create a class named ```PluginTemplate```
+### Step 2: The `PluginTemplate` class
+Now we need to create the `class [TemplateId]` in the `[template-id].php` file (my-plugin.php <=> MyPlugin), which extends the `abstract class TemplateBase`. This class will define the details of the process, from collecting user data until the new plugin is ready, customized and active. The `TemplateBase` class will already be present and does not need to be included.
 
-### Variáveis
-| Variable | Description | Default value | Asked to user? | Required? |
+Ways the template can influence the plugin generation process
+
+#### Data collect
+There are some default variables that the system needs (table below), but the template can add custom ones that will be defined by the user and can be used for substitutions. Use the `templateVars` property for this, adding your variables.
+
+To add a custom variable:
+
+     $this->templateVars['variableName'] = [ // Variable name
+         // Question presented to the user
+         "question" => "Question to user",
+         // User suggested value (optional)
+         "default" => "Default value",
+         // A method to receive the typed value (optional)
+         "handler" => "methodName",
+         // If TRUE, the question will repeat until answered (optional)
+         "required" => true
+
+#### Cloning the files
+The `base_directories` and `base_files` methods are mandatory and the arrays returned by them will define, respectively, which directories need to be created and which files (or entire directories) must be copied to the new location. Paths are relative to the plugin directory.
+
+**`base_directories()`**
+
+    public function base_directories() {
+        return ["langs"]; // directory '/langs' will be created
+    }
+
+**`base_files()`**
+Here we can rename the files. The indexes define the source of the files (path relative to the root of the plugin), while the values define the new name of the files (just the name, without the path). If the file is in a directory, when copied it will be placed in that same folder - which must be previously created.
+To copy a directory with all its contents, use '/*'.
+
+    public function base_files() {
+        return [
+            'vue-plugin-base.php' => "{$this->pluginSlug}.php",
+            'langs/prefix-pt_BR.mo' => "{$this->prefix}-pt_BR.mo",
+            'langs/prefix-pt_BR.po' => "{$this->prefix}-pt_BR.po",
+            'vue-app/*' => '*'
+        ];
+    }
+
+#### Substitution of terms
+We have the `replacement_files` and `replacement_terms` methods to define what will be replaced and which files will go through the replacement process.
+
+**`replacement_files()`**
+
+    public function replacement_files() {
+        return [
+            "{$this->pluginDirectory}/langs/{$this->prefix}-pt_BR.po",
+            "{$this->pluginDirectory}/vue-app/src/components/Wp/api.js",
+            "{$this->pluginDirectory}/vue-app/package.json"
+        ];
+    }
+
+**`replacement_terms()`**
+The indices define the terms that will be searched and replaced and the values, the names of the properties (or methods) that must replace each respective term.
+
+    public function replacement_terms() {
+        return [
+            "VuePluginBase" => "className",
+            "vue-plugin-slug" => "pluginSlug",
+            "Plugin name" => "pluginName",
+            "VPB posts" => "postTypeNamePlural",
+            "VPB post" => "postTypeName",
+            "prefix_post" => "postTypeId",
+            "vue_plugin_base" => "varName",
+            "prefix_shortcode" => "shortcodeName",
+            "prefix" => "prefix",
+            "WP-Vue plugin base post type" => "postTypeDescription",
+            "http://localhost:8080" => "devUrl"
+        ];
+    }
+
+### Variables
+| Variable | Description | Default value | User value? | Mandatory? |
 | -- | -- | -- | :--: | :--: |
 | pluginName | Plugin name | $argv[2] | Yes | Yes |
-| pluginSlug | Name for URLs | $utils->toSlug(pluginName) | Yes | Yes |
-| prefix | Prefix for some functions | $utils->toPrefix(pluginName) | No | Yes |
+| pluginSlug | Name used in URLs | $utils->toSlug(pluginName) | Yes | Yes |
+| prefix | Prefix for general use | $utils->toPrefix(pluginName) | No | Yes |
 | shortcodeName | Name for the shortcode | [prefix]_shortcode | Yes | Yes |
-| postTypeName | Post type singular name | $argv[3] | Yes | Yes |
-| postTypePlural | Post type plural name | [postTypeName]s | Yes | Yes |
+| postTypeName | Singular name for the post type | $argv[3] | Yes | Yes |
+| postTypePlural | Plural name for post type | [postTypeName]s | Yes | Yes |
 | postTypeSlug | Name for URLs | $utils->toSlug(postTypeName) | Yes | Yes |
-| pluginDirectory | The full path to the new plugin | (...)/plugins/[pluginSlug] | No | Yes |
-| varName | PHP variable that holds the plugin instance | $utils->toSlug(postTypeName, '_') | No | Yes |
-| className | Name for the plugin class | $utils->toClassName(postTypeName) | No | Yes |
-| args | The arguments typed on calling the system. | - | - | - |
-| flags | The flags sent (named values like: -\-flag=value) | - | - | - |
-| template_vars | Contains all variablesthat will be asked to the user | -|- | - |
-| fillHeader | If TRUE the header fields will be asked | TRUE | - | Yes |
-| postType | If TRUE the post type fields will be asked | FALSE | - | Yes |
-| appDir | The path to Vue app dir, relative to plugin folder | 'vue-app' | - | Yes |
-| i18nDir | If your plugin uses i18n JSON translations, the path to translation files | 'vue-app/src/i18n' | - | Yes |
-| wpLangDir | Path to WP translation files | 'langs' | - | Yes |
+| pluginDirectory | Full path to plugin | (...)/plugins/[pluginSlug] | No | Yes |
+| varName | Variable that will receive the plugin instance | $utils->toSlug(postTypeName, '_') | No | Yes |
+| className | Name for the class | $utils->toClassName(postTypeName) | No | Yes |
+| args | The arguments entered when calling the system. | | | |
+| flags | The flags sent (values named like this: -\-flag=value) | | | |
+| templateVars | Contains all variables that will be defined by the user | | | |
+| fillHeader | If TRUE, the values in the plugin header will also be set at installation | TRUE | | Yes |
+| postType | If TRUE, data for the post type will be asked | FALSE | | Yes |
+| appDir | The path to the Vue app directory, relative to the plugin folder | 'vue-app' | | Yes |
+| i18nDir | If the plugin uses i18n translations, the path to the JSON files directory | 'vue-app/src/i18n' | | Yes |
+| wpLangDir | Full path to WP translation files | 'langs' | | Yes |
+| devHost | Host URL | 'http://127.0.0.1' | | Yes |
+| devPort | Port to run development server | 8080 | | No |
 
 ### Required methods
 | Name | Description |
 | -- | -- |
-| base_directories | Should return the directories that must be created |
-| base_files | Should return the files / directories that must be copied |
-| replacement_files | Should return the files that will have it's content replaced |
-| replacement_terms | Should return the terms to replace and it's replacements |
+| base_directories | It should return an array with the directories that need to be created |
+| base_files | It should return an array with the files / directories that need to be copied |
+| replacement_files | It must return an array with the files that will have their content replaced |
+| replacement_terms | It should return an array with the terms to be replaced and their respective substitutions |

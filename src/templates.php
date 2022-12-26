@@ -1,28 +1,11 @@
 <?php
 
 trait WpVuePluginBaseTemplates {
-    // show available templates
-    public function show_templates() {
-        $templates = $this->get_templates();
-        foreach ($templates as $tpl) {
-            $info = $this->extract_template_info($tpl);
-            $def = $tpl == $this->defaultTemplate ? " (default)" : "";
-            $this->line();
-            $this->line("{$info['name']}{$def}");
-            $this->line();
-            $this->line("    " . $info['description']);
-            $this->line("    ID: '{$tpl}'");
-            if (empty($def)) {
-                $this->line("    Use like this:\n");
-                $this->line("        php wp-vue-plugin create --template={$tpl}\n");
-            }
-        }
-    }
 
     // get info from a template file without instanciate the object
     public function extract_template_info($slug) {
         $arr = ['id' => '', 'name' => '', 'description' => ''];
-        $code = file_get_contents("{$this->localPath}/templates/{$slug}/plugin-template.php");
+        $code = file_get_contents("{$this->localPath}/templates/{$slug}/{$slug}.php");
         if (preg_match("/\btemplateId *= *[\"']([^\"']+)[\"']/", $code, $matches)) {
             $arr['id'] = $matches[1];
         }
@@ -46,8 +29,10 @@ trait WpVuePluginBaseTemplates {
         global $localPath;
         $localPath = $this->localPath;
         require_once "{$this->localPath}/src/template-base.php";
-        require_once "{$this->localPath}/templates/{$this->templateName}/plugin-template.php";
-        $this->template = new PluginTemplate($this->args, $this->flags);
+        require_once "{$this->localPath}/templates/{$this->templateName}/{$this->templateName}.php";
+        $cls = $this->toClassName($this->templateName);
+        $this->template = new $cls($this->args, $this->flags);
+        // print "TEMPLATE:\n"; print_r($this->template);
         $this->template->set_info($this->template_values());
     }
 
@@ -75,6 +60,20 @@ trait WpVuePluginBaseTemplates {
             }
             return [];
         }
+    }
+
+    // get some value from template object
+    public function get_template_var($name) {
+        if (property_exists($this->template, $name)) {
+            return $this->template->{$name};
+        }
+        if (method_exists($this->template, $name)) {
+            $ret = $this->template->{$name}();
+            if (gettype($ret) == 'string') {
+                return $ret;
+            }
+        }
+        return null;
     }
 
     // if $this->template is empty, fill it with the needed values

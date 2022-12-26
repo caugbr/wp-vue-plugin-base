@@ -2,6 +2,16 @@
 
 trait WpVuePluginBaseUtils {
 
+    public function args2props($args) {
+        if (property_exists($this, 'expectedArgs')) {
+            foreach ($args as $i => $arg) {
+                if (isset($this->expectedArgs[$i])) {
+                    $this->{$this->expectedArgs[$i]} = $arg;
+                }
+            }
+        }
+    }
+
     // slug from plugin name
     // "Plugin name" <=> plugin-name
     public function toSlug($str, $spacesTo = '-') {
@@ -16,8 +26,8 @@ trait WpVuePluginBaseUtils {
     // "Plugin name" <=> PluginName
     public function toClassName($str) {
         $str = $this->unaccent($str);
-        $str = preg_replace("/[^a-zA-Z ]+/", "", $str);
-        $parts = preg_split("/\s+/", trim($str));
+        $str = preg_replace("/[^a-zA-Z -]+/", "", $str);
+        $parts = preg_split("/(-|\s)+/", trim($str));
         $parts = array_map(function($word) { return ucfirst($word); }, $parts);
         return join("", $parts);
     }
@@ -27,7 +37,7 @@ trait WpVuePluginBaseUtils {
     // "Three names or more" <=> tnom
     public function toPrefix($str) {
         $str = $this->unaccent($str);
-        $prts = preg_split("/\s+/", trim($str));
+        $prts = preg_split("/(-|\s)+/", trim($str));
         $parts = array_map(function($word) { return strtolower($word[0]); }, $prts);
         if (count($parts) < 3) {
             return strtolower(substr(join("", $prts), 0, 3));
@@ -44,7 +54,11 @@ trait WpVuePluginBaseUtils {
     }
 
     // prints a line
-    public function line($str = '') {
+    public function line($str = '', $indent = 0) {
+        if ($indent > 0) {
+            $start = str_repeat(" ", $indent);
+            $str = $start . preg_replace("/\n/", "\n{$start}", $str);
+        }
         print $str . PHP_EOL;
     }
 

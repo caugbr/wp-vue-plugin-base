@@ -1,12 +1,13 @@
 <?php
 
-class PluginTemplate extends TemplateBase {
+class Shortcode extends TemplateBase {
+
+    public $templateId = "shortcode";
+    public $templateName = "Shortcode";
+    public $templateDescription = "Creates a plugin with a Vue app already functional, to use in site via shortcode.";
 
     public function __construct($args, $flags) {
         $this->set_args($args, $flags);
-        $this->templateId = "shortcode";
-        $this->templateName = "Shortcode";
-        $this->templateDescription = "Creates a plugin with a Vue app already functional, to use in site via shortcode.";
     }
 
     public function base_directories() {

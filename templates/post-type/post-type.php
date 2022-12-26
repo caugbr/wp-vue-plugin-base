@@ -1,9 +1,14 @@
 <?php
 
-class PluginTemplate extends TemplateBase {
+class PostType extends TemplateBase {
 
+    public $fillHeader = false;
     public $postType = true;
-    // public $devPort = '8081';
+// public $devPort = '8081';
+    public $templateId = "post-type";
+    public $templateName = "Post type";
+    public $templateDescription = "Creates a new post type and gives you two Vue apps running, one in admin, in a metabox to\nedit your post type content and other to show this content in site, via shortcode.";
+
 
     public function __construct($args, $flags) {
         $this->set_args($args, $flags);
@@ -12,9 +17,6 @@ class PluginTemplate extends TemplateBase {
             "question" => "Post type description?",
             "required" => false
         ];
-        $this->templateId = "post-type";
-        $this->templateName = "Post type";
-        $this->templateDescription = "Creates a new post type and gives you two Vue apps running, one in admin, in a metabox to edit your post type content and other to show this content in site, via shortcode.";
     }
 
     public function base_directories() {

@@ -13,84 +13,11 @@ require_once "./src/base.php";
 function callWPVuePlugin($args) {
     $wpv = new WPVuePlugin($args);
 
-    if (!isset($wpv->args[1])) {
-        $wpv->help();
-        return;
-    }
-
-    if ($wpv->args[1] == 'remove') {
-        if (empty($wpv->args[2])) {
-            $wpv->line("\nThe plugin slug is required to command REMOVE.");
-        } else {
-            if ($wpv->askYesNo("This action will remove the plugin permanently. Are you sure? (Y/N)")) {
-                $wpv->remove($wpv->args[2]);
-            }
-        }
-        return;
-    }
-
-    if ($wpv->args[1] == 'templates') {
-        $wpv->show_templates();
-        return;
-    }
-
-    if ($wpv->args[1] == 'install') {
-        if (empty($wpv->args[2])) {
-            $wpv->line("\nThe plugin slug is required to command INSTALL.");
-        } else {
-            $wpv->install($wpv->args[2]);
-        }
-        return;
-    }
-
-    if ($wpv->args[1] == 'serve') {
-        if (empty($wpv->args[2])) {
-            $wpv->line("\nThe plugin slug is required to command SERVE.");
-        } else {
-            $wpv->startServer($wpv->args[2]);
-        }
-        return;
-    }
-
-    if ($wpv->args[1] == 'build') {
-        if (empty($wpv->args[2])) {
-            $wpv->line("\nThe plugin slug is required to command BUILD.");
-        } else {
-            $wpv->build($wpv->args[2]);
-        }
-        return;
-    }
-
-    if ($wpv->args[1] == 'lang-file') {
-        if (empty($wpv->args[2]) || empty($wpv->args[3])) {
+    if (!$wpv->commands->isCommand) {
             $wpv->line();
-            $wpv->line("The command LANG-FILE requires the plugin slug and the language code.");
-        } else {
-            $lname = $wpv->args[3];
-            if (empty($wpv->args[4])) {
-                $wpv->line();
-                $wpv->line("Language name (written in that language)?");
-                $lname = readline();
-            }
-            $wpv->extractStrings($wpv->args[2], $wpv->args[3], empty($wpv->args[4]) ? $lname : $wpv->args[4]);
-        }
-        return;
+            $wpv->line("ERROR: Command not recognized '{$wpv->args[1]}'");
+            return;
     }
-
-    if ($wpv->args[1] != 'create') {
-        $wpv->line();
-        $wpv->line("Command not recognized '{$wpv->args[1]}'");
-        return;
-    }
-
-    if (!empty($wpv->args[2])) {
-        $wpv->pluginName = $wpv->args[2];
-        if (!empty($wpv->args[3])) {
-            $wpv->postTypeName = $wpv->args[3];
-        }
-    }
-
-    $wpv->create();
 }
 
 callWPVuePlugin($argv);

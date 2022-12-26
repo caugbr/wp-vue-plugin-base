@@ -1,5 +1,5 @@
 # WP-Vue plugin base
-Este script não é um plugin Wordpress. Embora precise ser colocado no diretório de plugins, trata-se de uma ferramenta PHP para linha de comando que gera um plugin já integrado com o Vue. É um boilerplate dinâmico que é criado já com os nomes que o usuário definir, mas que é entregue pronto, instalado e funcionando.
+Este script não é um plugin Wordpress. Embora precise ser colocado no diretório de plugins, trata-se de uma ferramenta PHP para linha de comando que gera um plugin já integrado com o Vue. É um boilerplate dinâmico que é criado já com os nomes que o usuário definir e que é entregue pronto, instalado e funcionando.
 
 ## WP-CLI
 O WP-Vue plugin base funciona melhor junto com o [WP-CLI](https://wp-cli.org/). Se você não tiver ele instalado, certas coisas não serão possíveis. Mesmo assim você pode utilizar o comando `create` para criar o seu plugin (com algumas restrições), mas todos os outros comandos dependem do WP-CLI e não irão funcionar.
@@ -91,3 +91,9 @@ Esse comando gera ou atualiza arquivos de tradução em JSON para o I18n, buscan
     php wp-vue-plugin lang-file plugin-slug lang_CODE
 
 Use esse comando para iniciar uma nova tradução ou atualizar um arquivo com novas strings adicionadas ao código.
+
+--------
+**HELP**
+Mostra textos de ajuda para os comandos disponíveis ou apenas para um, se o parâmetro `command` for enviado.
+
+      php wp-vue-plugin help [command]

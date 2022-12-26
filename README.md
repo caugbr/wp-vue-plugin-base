@@ -1,109 +1,106 @@
-# WP-Vue plugin base
-This script is not a Wordpress plugin. Although it must be placed in the plugins directory, it is a command line tool that generates a WP plugin, a starter code for you to build your own plugin, already integrated with Vue 2.
+# WP-Vue base plugin
+This script is not a Wordpress plugin. Although it needs to be placed in the plugins directory, this is a PHP command line tool that generates a plugin already integrated with Vue. It is a dynamic boilerplate that is created with values defined by user and delivered ready, installed and working.
 
 ## WP-CLI
-WP-Vue plugin base works better with [WP-CLI](https://wp-cli.org/). If you don't have it installed in you machine, some steps will be skiped and some things will not be possible. Anyway you can use it to create you plugin, but all other commands depends on WP-CLI and will not work.
+The base WP-Vue plugin works better with [WP-CLI](https://wp-cli.org/). If you don't have it installed, some things won't be possible. You can still use command `create` to generate your plugin (with some restrictions), but all other commands depends on WP-CLI and will not work.
 
-## Plugin templates
-The WP-Vue plugin base was a boilerplate, but this version brings the possibility to add new templates. In other words, now it is a plugin generator, capable to install  different plugins, with other designs and features.
-This version has two templates.
+## Templates
+This is the base code for the plugin being created, which we call 'template'. It defines how the creation will happen, which values will be substituted in which files, etc. The system is able to work with several different templates.
 
 ### The 'post-type' template
-The starter code comes with all Vue related things done and two views already linked and functional. The component Backend.vue is loaded in post edit page and the Frontend.vue will be loaded using a shortcode. This is the default template.
-
-Things you'll have to start:
-
-* a new post type
-* a metabox on this post type edit page with a button to show the Vue app layer
-* a shortcode to display the frontend app in your site
-* a helper script to use the WP Rest API in your Vue app
-* all needed stuff to integrate WP with Vue
+This is the system's default template and its code includes the creation of a post type and two functional views. The Backend.vue component will be available on the edit page of the created post type, providing a way to override the editor and create a custom edit for this custom type. The Frontend.vue component was designed to display this type on  website and can be included in any publication via shortcode.
 
 ### The 'shortcode' template
-This is a similar version, but without the admin part. Here you'll have only a shortcode to display the Vue app in your site.
+This is a similar version, but without the administration part. With this template you will only have a shortcode to display your Vue app on the website, probably using data from a post via the REST API.
 
-Things you'll have to start:
-
-* a shortcode to display the frontend app in your site
-* a helper script to use the WP Rest API in your Vue app
-* all needed stuff to integrate WP with Vue
-
-## The Vue app
-* Vuex
+## Vue app
+* Vex
 * Sass
 * Some custom components
-  * I18n - *a simple way translate strings stored on JSON files, based in WP language. Used as a Vue plugin.*
-  * Wait overlay - *a loading overlay.*
-  * User message - *a top bar to show messages to the user.*
-  * Wp/AdminLayout - *a layer with the same layout of Gutemberg editor.*
-  * Wp/MetaBox - *creates a metabox to use in the sidebar of AdminLayout.*
+   * I18n - *a simple way to translate strings stored in JSON files, based on the WP language. Used as a Vue plugin.*
+   * Wait overlay - *loading overlay.*
+   * User message - *user message bar.*
+   * Wp/AdminLayout - *a blank layer following the Gutemberg editor layout.*
+   * Wp/MetaBox - *metaboxes to use in AdminLayout component's sidebar.*
 
-## How to use it
-Navigate to `.../wp-content/plugins/wp-vue-plugin-base` using the prompt and run the desired command.
-All commands must run under this directory.
+## How to use
 
----------
-Available commands are:
+Navigate to `.../wp-content/plugins/wp-vue-plugin-base` and, using the prompt, run the desired command. All commands must run under this directory.
 
+--------
+The available commands are:
+
+--------
 **TEMPLATES**
-Use the command 'templates' to see the available plugin templates.
+Use the 'templates' command to see a list of available templates.
 
-    php wp-vue-plugin templates
+     php wp-vue-plugin templates
 
----------
+--------
 **CREATE**
-The command 'create' generates a new Wordpress plugin integrated with Vue 2.
+The 'create' command generates a new Wordpress plugin.
 
-    php wp-vue-plugin create
- 
-You can change the template using one of the slugs this command will show with the flag 'template'.
+     php wp-vue-plugin create
 
-    php wp-vue-plugin create --template=template-id
+To choose another template, use the 'template' flag.
 
-It will ask you to define some names. If there is a value between parentheses, this the auto generated value. Type your own value to replace it or just press [Enter] to accept the suggestion.
+     php wp-vue-plugin create --template=template-id
+
+The system will ask the user to define some values. If there is a value between parentheses, it is a suggestion generated from values already entered. Just press [Enter] to accept the suggestion.
 
 Once started, the process will:
 
 * Copy all files to the new plugin location
-* Replace all key strings by your values
-* Go to the new Vue app and install packages if you want (recommended)
-* Verify if the plugin was installed (depends on WP-CLI)
-* Activate your plugin if you want (depends on WP-CLI)
-* Publish a test post if you want (depends on WP-CLI)
-* Open the plugin file in Visual code if you want
-* Start the development server
+* Replace strings with user-defined values
+* Install packages via NPM
+* Check if the plugin has been installed in WP (depends on WP-CLI)
+* Enable plugin in admin (optional - depends on WP-CLI)
+* Publish a test post (optional - depends on WP-CLI)
+* Open the plugin file in Visual code (optional)
+* Start the development server (optional)
 
-At this point, everything is done. Just start working.
+At this point the user has everything ready to start working.
 
 --------
 **INSTALL**
-Install the project packages if you did not when creating or if you want to reinstall packages.
+Install or reinstall plugin packages via NPM
 
-    php wp-vue-plugin install plugin-slug
+     php wp-vue-plugin install plugin-slug
 
-You can do it manually. Just open prompt in your plugin directory, navigate to ./vue-app and run `npm install`.
+To do this directly, navigate to the plugin's vue-app directory and run `npm install`.
 
 --------
 **SERVE**
-The command 'serve' starts the development server to the given plugin.
+This command starts the development server for the given plugin
 
-    php wp-vue-plugin serve plugin-slug
+     php wp-vue-plugin serves plugin-slug
 
-You can start server here using the generated plugin slug. Other way is to open prompt in your plugin directory, navigate to ./vue-app and run `npm run serve`.
+To do this directly, navigate to the plugin's vue-app directory and run `npm run serve`.
 
 --------
 **BUILD**
-The command 'build' generates the production package to publish your site.
+The command 'build' generates the final production package for publishing your site.
 
-    php wp-vue-plugin build plugin-slug
+     php wp-vue-plugin build plugin-slug
 
-You can build the production package from here using the generated plugin slug. Other way is to open prompt in your plugin directory, navigate to ./vue-app and run `npm run build`.
+To do this directly, navigate to the plugin's vue-app directory and run `npm run build`.
+
+--------
+**EDIT-HEADER**
+Edit the header values for the given plugin
+
+      php wp-vue-plugin edit-header [slug]
 
 --------
 **LANG-FILE**
-The command 'lang-file' generates a new I18n translation file (JSON), with all translatable strings on it.
-These are the strings sent to the translation functions `t()` and `tl()`. They will be extracted from your Vue files.
- 
-    php wp-vue-plugin lang-file plugin-slug lang_CODE
+This command generates or updates JSON translation files for the I18n, looking for the strings to be translated in the plugin code. These are the strings that the user sent to the `t()` and `tl()` functions.
 
-Use this command to start a new translation. It will read all occurrences of `t('Some string')` and `tl('Some string')` and put it all into the new file.
+     php wp-vue-plugin lang-file plugin-slug lang_CODE
+
+Use this command to start a new translation or update a file with new strings added to the code.
+
+--------
+**HELP**
+Shows the help texts for all available commands or for  specific one, if the command is given.
+
+      php wp-vue-plugin help [command]
